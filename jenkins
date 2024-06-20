@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/raghudeveloptrees/onlinebookstore.git'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('deploy') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: '7e432c50-e893-4f84-89ae-a28cd27eeaae', path: '', url: 'http://13.232.150.55:8081')], contextPath: 'booksrepo', war: '**/*.war'
+            }
+        }
+    }
+}
